@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>המשימות שלי</title>
+</head>
+<body>
+  <h2>שלום וברוך הבא למנהל המשימות</h2>
+
+  <div>
+    <input id="taskInput" placeholder="כתוב משימה חדשה">
+    <button onclick="addTask()">הוסף</button>
+  </div>
+
+  <h3>המשימות שלך:</h3>
+  <ul id="taskList"></ul>
+
+  <button onclick="logout()">התנתק</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const output = document.getElementById("output");
+
+    if (!token) {
+      output.textContent = "אין טוקן – עליך להתחבר";
+      window.location.href = "/login.html";
+    } else {
+      loadTasks();
+    }
+
+    async function loadTasks() {
+      try {
+        const res = await fetch("/tasks", {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        if (!res.ok) throw new Error("שגיאה בעת שליפת המשימות");
+
+        const tasks = await res.json();
+        const list = document.getElementById("taskList");
+        list.innerHTML = "";
+        tasks.forEach(task => {
+          const li = document.createElement("li");
+          li.textContent = task.title;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        output.textContent = "שגיאת טעינה: " + err.message;
+      }
+    }
+
+    async function addTask() {
+      const title = document.getElementById("taskInput").value;
+      if (!title) return;
+
+      try {
+        const res = await fetch("/tasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({ title })
+        });
+
+        if (!res.ok) throw new Error("שגיאה בהוספת משימה");
+
+        document.getElementById("taskInput").value = "";
+        loadTasks();
+      } catch (err) {
+        output.textContent = "שגיאת הוספה: " + err.message;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "/login.html";
+    }
+  </script>
+</body>
+</html>

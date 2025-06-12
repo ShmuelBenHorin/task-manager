@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>הרשמה</title>
+</head>
+<body>
+  <h2>הרשמה</h2>
+  <input id="username" placeholder="שם משתמש"><br>
+  <input id="password" type="password" placeholder="סיסמה"><br>
+  <button onclick="register()">הירשם</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    async function register() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const output = document.getElementById("output");
+
+      try {
+        const res = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          output.textContent = "שגיאה: " + (data.error || "לא הצליח להירשם");
+          return;
+        }
+
+        output.textContent = "נרשמת בהצלחה! מעביר להתחברות...";
+        setTimeout(() => window.location.href = "/login.html", 1500);
+
+      } catch (err) {
+        output.textContent = "שגיאת רשת: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>

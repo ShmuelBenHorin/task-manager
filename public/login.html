@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>התחברות</title>
+</head>
+<body>
+  <h2>התחברות</h2>
+  <input id="username" placeholder="שם משתמש"><br>
+  <input id="password" type="password" placeholder="סיסמה"><br>
+  <button onclick="login()">התחבר</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const output = document.getElementById("output");
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const contentType = res.headers.get("content-type");
+
+        if (!res.ok) {
+          const errorText = contentType && contentType.includes("application/json")
+            ? (await res.json()).error
+            : "שגיאה לא צפויה מהשרת";
+          return output.textContent = "שגיאה: " + errorText;
+        }
+
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        output.textContent = "התחברת בהצלחה. מעביר אותך...";
+        setTimeout(() => window.location.href = "/tasks.html", 1500);
+      } catch (err) {
+        output.textContent = "שגיאת רשת: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
