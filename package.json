@@ -2,18 +2,29 @@
   "name": "task-manager",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+"scripts": {
+  "start": "node index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
+
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "מערכת ניהול משימות מבוססת Node.js עם Express, אימות JWT, חיבור למסד נתונים MongoDB, וממשק משתמש פשוט ב־HTML + CSS + JavaScript.",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShmuelBenHorin/task-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ShmuelBenHorin/task-manager/issues"
+  },
+  "homepage": "https://github.com/ShmuelBenHorin/task-manager#readme"
 }
