@@ -1,10 +1,3 @@
-<script>
-  // בודק אם יש טוקן – אם לא, מעיף להתחברות
-  const token = localStorage.getItem("token");
-  if (!token) {
-    window.location.href = "login.html";
-  }
-</script>
 <!DOCTYPE html>
 <html lang="he">
 <head>
@@ -53,7 +46,7 @@
         tasks.forEach(task => {
           const li = document.createElement("li");
           li.textContent = task.title + " ";
-          
+
           const editBtn = document.createElement("button");
           editBtn.textContent = "✏️";
           editBtn.onclick = () => editTask(task._id, task.title);
