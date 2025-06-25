@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-  <link rel="stylesheet" href="style.css">
-
   <meta charset="UTF-8">
   <title>התחברות</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>התחברות</h2>
-  <input id="username" placeholder="שם משתמש"><br>
-  <input id="password" type="password" placeholder="סיסמה"><br>
-  <button onclick="login()">התחבר</button>
-  <pre id="output"></pre>
+  <div class="center">
+    <h2>התחברות</h2>
+
+    <input type="text" id="username" placeholder="שם משתמש">
+    <input type="password" id="password" placeholder="סיסמה">
+    <button onclick="login()">התחבר</button>
+
+    <p>אין לך חשבון? <a href="register.html">להרשמה</a></p>
+
+    <div id="errorMsg" class="error" style="display: none;"></div>
+  </div>
 
   <script>
     async function login() {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
-      const output = document.getElementById("output");
 
-      try {
-        const res = await fetch("/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ username, password })
-        });
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
 
-        const contentType = res.headers.get("content-type");
+      const data = await res.json();
 
-        if (!res.ok) {
-          const errorText = contentType && contentType.includes("application/json")
-            ? (await res.json()).error
-            : "שגיאה לא צפויה מהשרת";
-          return output.textContent = "שגיאה: " + errorText;
-        }
-
-        const data = await res.json();
+      if (!res.ok) {
+        showError(data.error || 'שגיאה כללית');
+      } else {
         localStorage.setItem("token", data.token);
-        output.textContent = "התחברת בהצלחה. מעביר אותך...";
-        setTimeout(() => window.location.href = "/tasks.html", 1500);
-      } catch (err) {
-        output.textContent = "שגיאת רשת: " + err.message;
+        window.location.href = "/tasks.html";
       }
+    }
+
+    function showError(msg) {
+      const div = document.getElementById("errorMsg");
+      div.textContent = msg;
+      div.style.display = "block";
+
+      setTimeout(() => {
+        div.style.display = "none";
+      }, 3000); // 3 שניות
     }
   </script>
 </body>

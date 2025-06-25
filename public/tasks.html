@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-  <link rel="stylesheet" href="style.css">
-
   <meta charset="UTF-8">
   <title>המשימות שלי</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h2>שלום וברוך הבא למנהל המשימות</h2>
@@ -19,7 +18,7 @@
 
   <button id="logoutBtn">התנתק</button>
 
-  <pre id="output"></pre>
+  <div id="output" class="error" style="display: none;"></div>
 
   <script>
     window.onload = () => {
@@ -27,12 +26,11 @@
       const output = document.getElementById("output");
 
       if (!token) {
-        output.textContent = "אין טוקן – עליך להתחבר";
+        showError("אין טוקן – עליך להתחבר");
         window.location.href = "/login.html";
         return;
       }
 
-      // קישור כפתורים לפונקציות
       document.getElementById("addBtn").onclick = addTask;
       document.getElementById("logoutBtn").onclick = logout;
 
@@ -41,9 +39,7 @@
       async function loadTasks() {
         try {
           const res = await fetch("/tasks", {
-            headers: {
-              "Authorization": "Bearer " + token
-            }
+            headers: { "Authorization": "Bearer " + token }
           });
 
           if (!res.ok) throw new Error("שגיאה בעת שליפת המשימות");
@@ -68,7 +64,7 @@
             list.appendChild(li);
           });
         } catch (err) {
-          output.textContent = "שגיאת טעינה: " + err.message;
+          showError("שגיאת טעינה: " + err.message);
         }
       }
 
@@ -91,7 +87,7 @@
           document.getElementById("taskInput").value = "";
           loadTasks();
         } catch (err) {
-          output.textContent = "שגיאת הוספה: " + err.message;
+          showError("שגיאת הוספה: " + err.message);
         }
       }
 
@@ -99,16 +95,14 @@
         try {
           const res = await fetch(`/tasks/${id}`, {
             method: "DELETE",
-            headers: {
-              "Authorization": "Bearer " + token
-            }
+            headers: { "Authorization": "Bearer " + token }
           });
 
           if (!res.ok) throw new Error("שגיאה במחיקת משימה");
 
           loadTasks();
         } catch (err) {
-          output.textContent = "שגיאת מחיקה: " + err.message;
+          showError("שגיאת מחיקה: " + err.message);
         }
       }
 
@@ -130,13 +124,22 @@
 
           loadTasks();
         } catch (err) {
-          output.textContent = "שגיאת עדכון: " + err.message;
+          showError("שגיאת עדכון: " + err.message);
         }
       }
 
       function logout() {
         localStorage.removeItem("token");
         window.location.href = "/login.html";
+      }
+
+      function showError(msg) {
+        output.textContent = msg;
+        output.style.display = "block";
+
+        setTimeout(() => {
+          output.style.display = "none";
+        }, 3000); // 3 שניות
       }
     };
   </script>
