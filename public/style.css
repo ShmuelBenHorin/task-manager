@@ -1,0 +1,78 @@
+/* בסיס כללי */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  direction: rtl;
+  text-align: right;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 2rem;
+  color: #333;
+}
+
+/* כותרות */
+h1, h2, h3 {
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+/* טפסים */
+input, select, textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* רשימות משימות */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* הודעות / שגיאות */
+pre#output, .message, .error {
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  color: red;
+  font-weight: bold;
+}
+
+/* מרכז דף */
+.center {
+  max-width: 500px;
+  margin: auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
